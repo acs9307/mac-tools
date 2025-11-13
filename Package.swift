@@ -50,6 +50,27 @@ let package = Package(
             path: "Sources/WindowManipulation"
         ),
 
+        // Caps Lock manipulation module
+        .target(
+            name: "CapsLockAgent",
+            dependencies: ["MacToolsCore"],
+            path: "Sources/CapsLockAgent"
+        ),
+
+        // Scroll behavior manipulation module
+        .target(
+            name: "ScrollMaster",
+            dependencies: ["MacToolsCore"],
+            path: "Sources/ScrollMaster"
+        ),
+
+        // Display layouts module
+        .target(
+            name: "DisplayLayouts",
+            dependencies: ["MacToolsCore"],
+            path: "Sources/DisplayLayouts"
+        ),
+
         // CLI executable
         .executableTarget(
             name: "MacToolsCLI",
@@ -57,6 +78,7 @@ let package = Package(
                 "MacToolsCore",
                 "KeyManipulation",
                 "WindowManipulation",
+                "CapsLockAgent",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
             path: "Sources/MacToolsCLI"
@@ -77,6 +99,21 @@ let package = Package(
             name: "WindowManipulationTests",
             dependencies: ["WindowManipulation", "MacToolsCore"],
             path: "Tests/WindowManipulationTests"
+        ),
+        .testTarget(
+            name: "CapsLockAgentTests",
+            dependencies: ["CapsLockAgent", "MacToolsCore"],
+            path: "Tests/CapsLockAgentTests"
+        ),
+        .testTarget(
+            name: "ScrollMasterTests",
+            dependencies: ["ScrollMaster", "MacToolsCore"],
+            path: "Tests/ScrollMasterTests"
+        ),
+        .testTarget(
+            name: "DisplayLayoutsTests",
+            dependencies: ["DisplayLayouts", "MacToolsCore"],
+            path: "Tests/DisplayLayoutsTests"
         ),
     ]
 )

@@ -3,6 +3,7 @@ import ArgumentParser
 import MacToolsCore
 import KeyManipulation
 import WindowManipulation
+import CapsLockAgent
 
 @main
 struct MacTools: AsyncParsableCommand {
@@ -15,7 +16,8 @@ struct MacTools: AsyncParsableCommand {
             Permissions.self,
             Config.self,
             Window.self,
-            Key.self
+            Key.self,
+            CapsLock.self
         ]
     )
 }
@@ -36,9 +38,11 @@ struct Daemon: AsyncParsableCommand {
         // Register agents
         let keyAgent = KeyManipulationAgent()
         let windowAgent = WindowManipulationAgent()
+        let capsLockAgent = CapsLockAgent()
 
         try manager.register(keyAgent)
         try manager.register(windowAgent)
+        try manager.register(capsLockAgent)
 
         if foreground {
             print("Starting MacTools daemon in foreground...")
@@ -298,6 +302,97 @@ struct Key: AsyncParsableCommand {
 
             try agent.typeText(text)
             print("Typed: \(text)")
+        }
+    }
+}
+
+// MARK: - CapsLock Command
+
+struct CapsLock: AsyncParsableCommand {
+    static let configuration = CommandConfiguration(
+        abstract: "Caps Lock manipulation commands",
+        subcommands: [Status.self, Enable.self, Disable.self, SetDelay.self]
+    )
+
+    struct Status: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Show Caps Lock agent status and configuration"
+        )
+
+        func run() async throws {
+            let agent = CapsLockAgent()
+            let config = agent.getConfiguration()
+
+            print("Caps Lock Agent Configuration:")
+            print("  Enabled: \(config.enabled)")
+            print("  Min Press Duration: \(config.minPressDuration)s (\(Int(config.minPressDuration * 1000))ms)")
+            print("  Quick Tap Action: \(formatAction(config.quickTapAction))")
+            print("  Long Press Action: \(formatAction(config.longPressAction))")
+            print("  Disable Caps Lock: \(config.disableCapsLock)")
+        }
+
+        private func formatAction(_ action: KeyAction) -> String {
+            switch action {
+            case .sendKey(let code):
+                return "Send Key \(code)"
+            case .sendModifier(let modifier):
+                return "Send Modifier (\(modifier.rawValue))"
+            case .disabled:
+                return "Disabled"
+            }
+        }
+    }
+
+    struct Enable: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Enable Caps Lock manipulation"
+        )
+
+        func run() async throws {
+            let manager = CapsLockConfigurationManager()
+            try manager.setEnabled(true)
+            print("✓ Caps Lock manipulation enabled")
+            print("  Restart the daemon for changes to take effect:")
+            print("  mactools daemon")
+        }
+    }
+
+    struct Disable: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Disable Caps Lock manipulation"
+        )
+
+        func run() async throws {
+            let manager = CapsLockConfigurationManager()
+            try manager.setEnabled(false)
+            print("✓ Caps Lock manipulation disabled")
+            print("  Restart the daemon for changes to take effect:")
+            print("  mactools daemon")
+        }
+    }
+
+    struct SetDelay: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(
+            commandName: "set-delay",
+            abstract: "Set the minimum press duration (in milliseconds)"
+        )
+
+        @Argument(help: "Minimum press duration in milliseconds")
+        var milliseconds: Int
+
+        func run() async throws {
+            guard milliseconds >= 0 else {
+                print("Error: Duration must be non-negative")
+                throw ExitCode.failure
+            }
+
+            let seconds = Double(milliseconds) / 1000.0
+            let manager = CapsLockConfigurationManager()
+            try manager.setMinPressDuration(seconds)
+
+            print("✓ Min press duration set to \(milliseconds)ms (\(seconds)s)")
+            print("  Restart the daemon for changes to take effect:")
+            print("  mactools daemon")
         }
     }
 }

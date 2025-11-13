@@ -116,7 +116,20 @@ public final class Configuration {
                 "enabled": true,
                 "animations": true,
                 "animationDuration": 0.2
-            ]
+            ],
+            "capsLock": [
+                "enabled": true,
+                "minPressDuration": 0.2,
+                "quickTapAction": [
+                    "type": "sendKey",
+                    "value": 53  // Escape key
+                ] as [String: Any],
+                "longPressAction": [
+                    "type": "sendModifier",
+                    "value": "control"
+                ] as [String: Any],
+                "disableCapsLock": true
+            ] as [String: Any]
         ]
     }
 

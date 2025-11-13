@@ -270,15 +270,28 @@ Goal: Detect display configurations and auto-arrange windows based on pre-config
 
 ⸻
 
-Issue 3.3 – Window management engine
-	•	Use Accessibility API (or WindowServer appropriate APIs) to:
-	•	Enumerate application windows
-	•	Move/resize windows to target frames on target displays
-	•	Abstract “window layout” as data:
-	•	App identifier + window role → position & size on particular display
-	•	Tests written & passing:
-	•	Unit tests for layout calculation given display config
-	•	Mock windows for verifying target frames
+✅ Issue 3.3 – Window management engine [COMPLETED]
+	•	✅ Use Accessibility API:
+	•	✅ AXUIElement for window access
+	•	✅ Enumerate application windows via AXWindowsAttribute
+	•	✅ Extract window properties (title, role, frame, minimized state)
+	•	✅ Move/resize windows to target frames:
+	•	✅ AXPositionAttribute and AXSizeAttribute for window manipulation
+	•	✅ Support for restoring minimized windows
+	•	✅ Support for unhiding hidden windows
+	•	✅ Batch layout application with detailed results
+	•	✅ Abstract "window layout" as data:
+	•	✅ WindowLayoutSpec: Window ID + target frame + display
+	•	✅ WindowIdentifier: App + title + role + index
+	•	✅ ApplicationIdentifier: Bundle ID + name
+	•	✅ WindowFrame: Position and size with CGRect conversion
+	•	✅ WindowLayoutPreset: Named collection of layouts per display config
+	•	✅ WindowLayoutPresetManager: Thread-safe preset storage
+	•	✅ WindowManager: Complete window manipulation API
+	•	✅ Tests written & passing:
+	•	✅ WindowLayoutTests (37 tests): Data structures, codability, equality
+	•	✅ Layout calculation and frame operations
+	•	✅ Preset management with thread safety
 
 ⸻
 

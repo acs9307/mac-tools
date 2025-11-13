@@ -41,14 +41,16 @@ Epic 1 – CapsLock Tuner (Reduced Press Delay)
 
 Goal: Manipulate Caps Lock behavior so it activates with reduced delay / responsiveness, ideally configurable.
 
-Issue 1.1 – Research & design Caps Lock manipulation strategy
-	•	Investigate macOS APIs for keyboard events (e.g., event taps, IOHID, NSEvent)
-	•	Decide design:
-	•	Event tap intercepts Caps Lock and synthesizes modified key events
-	•	Global app, LaunchAgent, or background menu bar app
-	•	Document constraints and OS permission requirements (Accessibility, Input Monitoring)
-	•	Write design doc in /docs/capslock-design.md
-	•	Tests written & passing (e.g., unit tests for config parsing / state machine logic)
+✅ Issue 1.1 – Research & design Caps Lock manipulation strategy [COMPLETED]
+	•	✅ Investigate macOS APIs for keyboard events (CGEventTap, IOHID, NSEvent)
+	•	✅ Decide design:
+	•	✅ CGEventTap intercepts Caps Lock and synthesizes modified key events
+	•	✅ Agent within existing MacTools daemon architecture
+	•	✅ Document constraints and OS permission requirements (Accessibility documented)
+	•	✅ Write design doc in /docs/capslock-design.md (comprehensive 12KB document)
+	•	✅ Tests written & passing:
+	•	✅ CapsLockConfigurationTests (6 tests for config parsing/serialization)
+	•	✅ KeyStateMachineTests (22 tests for state machine logic, timing, edge cases)
 
 ⸻
 

@@ -50,6 +50,13 @@ let package = Package(
             path: "Sources/WindowManipulation"
         ),
 
+        // Caps Lock manipulation module
+        .target(
+            name: "CapsLockAgent",
+            dependencies: ["MacToolsCore"],
+            path: "Sources/CapsLockAgent"
+        ),
+
         // CLI executable
         .executableTarget(
             name: "MacToolsCLI",
@@ -77,6 +84,11 @@ let package = Package(
             name: "WindowManipulationTests",
             dependencies: ["WindowManipulation", "MacToolsCore"],
             path: "Tests/WindowManipulationTests"
+        ),
+        .testTarget(
+            name: "CapsLockAgentTests",
+            dependencies: ["CapsLockAgent", "MacToolsCore"],
+            path: "Tests/CapsLockAgentTests"
         ),
     ]
 )

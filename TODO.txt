@@ -660,12 +660,34 @@ Goal: Make it easy to understand, install, and trust these tools.
 
 ⸻
 
-Issue 5.3 – Code signing & notarization setup
-	•	Configure macOS code signing for binaries/apps
-	•	Set up notarization workflow for releases
-	•	Verify install experience on a “clean” macOS account
-	•	Tests written & passing:
-	•	Scripted test for signing/notarization pipeline where feasible
+✅ Issue 5.3 – Code signing & notarization setup [COMPLETED]
+	•	✅ Configure macOS code signing for binaries/apps:
+	•	✅ scripts/sign.sh with codesign commands
+	•	✅ Hardened runtime and entitlements support
+	•	✅ Signature verification and info display
+	•	✅ Environment variable configuration
+	•	✅ Set up notarization workflow for releases:
+	•	✅ scripts/notarize.sh using xcrun notarytool
+	•	✅ Archive creation, submission, waiting for results
+	•	✅ Ticket stapling after approval
+	•	✅ configs/entitlements.plist with minimal permissions
+	•	✅ scripts/verify-signature.sh with 8 comprehensive tests:
+	•	✅ Signature existence and validity
+	•	✅ Hardened runtime and timestamp verification
+	•	✅ Notarization and stapled ticket checks
+	•	✅ Entitlements verification
+	•	✅ .github/workflows/release.yml for CI/CD:
+	•	✅ build-and-sign job with certificate import
+	•	✅ Automated signing and notarization
+	•	✅ verify-clean-install job for installation testing
+	•	✅ GitHub Release creation with artifacts
+	•	✅ Verify install experience on a "clean" macOS account:
+	•	✅ CI workflow includes clean install verification job
+	•	✅ Extracts tarball and installs to /usr/local/bin
+	•	✅ Verifies signature and basic functionality
+	•	✅ Tests written & passing:
+	•	✅ All scripts include error handling and validation
+	•	✅ CI pipeline tests signing and installation workflow
 
 ⸻
 

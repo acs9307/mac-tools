@@ -57,6 +57,13 @@ let package = Package(
             path: "Sources/CapsLockAgent"
         ),
 
+        // Scroll behavior manipulation module
+        .target(
+            name: "ScrollMaster",
+            dependencies: ["MacToolsCore"],
+            path: "Sources/ScrollMaster"
+        ),
+
         // CLI executable
         .executableTarget(
             name: "MacToolsCLI",
@@ -90,6 +97,11 @@ let package = Package(
             name: "CapsLockAgentTests",
             dependencies: ["CapsLockAgent", "MacToolsCore"],
             path: "Tests/CapsLockAgentTests"
+        ),
+        .testTarget(
+            name: "ScrollMasterTests",
+            dependencies: ["ScrollMaster", "MacToolsCore"],
+            path: "Tests/ScrollMasterTests"
         ),
     ]
 )

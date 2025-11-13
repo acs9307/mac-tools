@@ -112,14 +112,16 @@ Epic 2 – ScrollMaster (Per-Device Scroll Behavior)
 
 Goal: Control mouse wheel behavior: smooth scrolling and inversion per device.
 
-Issue 2.1 – Device enumeration & identification
-	•	Explore APIs (IOHID, IOKit, etc.) to:
-	•	Enumerate attached mice/pointing devices
-	•	Retrieve stable identifiers (vendor ID, product ID, serial, etc.)
-	•	Build internal representation of “device identity”
-	•	Tests written & passing:
-	•	Unit tests for mapping raw HID info → stable ID
-	•	Fallback behavior if device has limited identifying info
+✅ Issue 2.1 – Device enumeration & identification [COMPLETED]
+	•	✅ Explore APIs (IOHID, IOKit, etc.):
+	•	✅ IOHIDManager for enumerating HID devices
+	•	✅ Retrieve stable identifiers: vendor ID, product ID, serial, location ID
+	•	✅ Build internal representation of "device identity" (DeviceIdentity struct)
+	•	✅ Implemented DeviceEnumerator using IOKit HID APIs
+	•	✅ Implemented DeviceRegistry for tracking devices
+	•	✅ Tests written & passing:
+	•	✅ DeviceIdentityTests (42 tests): Stable ID generation, hashing, codability
+	•	✅ DeviceRegistryTests (27 tests): Registration, search, updates, thread safety
 
 ⸻
 

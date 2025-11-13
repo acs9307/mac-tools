@@ -1,5 +1,8 @@
 # MacTools
 
+[![CI](https://github.com/acs9307/mac-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/acs9307/mac-tools/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/acs9307/mac-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/acs9307/mac-tools)
+
 A powerful suite of macOS system tools for key and window manipulation, installable as system daemons for seamless background operation.
 
 ## Features

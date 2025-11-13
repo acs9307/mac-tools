@@ -27,13 +27,13 @@ Goal: Solid foundation, CI, testing, and a clear Definition of Done (DoD) that e
 
 ⸻
 
-Issue 0.3 – CI pipeline for macOS builds & tests
-	•	Configure CI (e.g., GitHub Actions) to:
-	•	Build all targets on macOS runner
-	•	Run all unit tests on PR
-	•	Fail on test/code coverage threshold (if using coverage tools)
-	•	Add status badge to README.md
-	•	Tests written & passing (e.g., a failing test initially to confirm CI catches it, then fixed)
+✅ Issue 0.3 – CI pipeline for macOS builds & tests [COMPLETED]
+	•	✅ Configure CI (GitHub Actions) to:
+	•	✅ Build all targets on macOS runner
+	•	✅ Run all unit tests on PR
+	•	✅ Fail on test/code coverage threshold (80% minimum)
+	•	✅ Add status badge to README.md (CI and Codecov badges)
+	•	✅ Tests written & passing (CI validates all tests on every PR and push)
 
 ⸻
 

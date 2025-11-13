@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+
+    - name: Cache Swift packages
+      uses: actions/cache@v3
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+
+    - name: Build all targets
+      run: swift build --verbose
+
+    - name: Run tests
+      run: swift test --verbose --enable-code-coverage
+
+    - name: Generate coverage report
+      run: |
+        xcrun llvm-cov export \
+          .build/debug/MacToolsPackageTests.xctest/Contents/MacOS/MacToolsPackageTests \
+          -instr-profile .build/debug/codecov/default.profdata \
+          -format="lcov" > coverage.lcov
+
+    - name: Check coverage threshold
+      run: |
+        COVERAGE=$(swift test --enable-code-coverage 2>&1 | grep -o '[0-9]\+\.[0-9]\+%' | head -1 | sed 's/%//')
+        THRESHOLD=80
+        echo "Current coverage: ${COVERAGE}%"
+        if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
+          echo "Error: Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
+          exit 1
+        fi
+        echo "Coverage check passed!"
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.lcov
+        fail_ci_if_error: false
+
+  lint:
+    name: SwiftLint
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install SwiftLint
+      run: brew install swiftlint
+
+    - name: Run SwiftLint
+      run: swiftlint lint --strict

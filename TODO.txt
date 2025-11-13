@@ -691,13 +691,64 @@ Goal: Make it easy to understand, install, and trust these tools.
 
 ⸻
 
-Issue 5.4 – Release packaging & distribution
-	•	Define release format(s):
-	•	Signed .dmg or .pkg
-	•	GitHub Releases
-	•	Create automated release script/workflow
-	•	Document upgrade/uninstall procedures
-	•	Tests written & passing:
-	•	CI test job for building release artifacts
+✅ Issue 5.4 – Release packaging & distribution [COMPLETED]
+	•	✅ Define release format(s):
+	•	✅ Signed .dmg via scripts/create-dmg.sh:
+	•	✅ Drag-and-drop installation with documentation
+	•	✅ Install helper script for easy setup
+	•	✅ Includes binary, docs, configs, scripts
+	•	✅ Customizable DMG window (if available)
+	•	✅ Signed .pkg via scripts/create-pkg.sh:
+	•	✅ Native macOS installer package
+	•	✅ Pre/post-install scripts for automation
+	•	✅ HTML-based installation wizard
+	•	✅ Component package with distribution XML
+	•	✅ Automated configuration setup
+	•	✅ Source tarball:
+	•	✅ Lightweight .tar.gz distribution
+	•	✅ Includes binary and all supporting files
+	•	✅ GitHub Releases:
+	•	✅ All formats published to GitHub Releases
+	•	✅ SHA-256 checksums for verification
+	•	✅ Automated via GitHub Actions workflow
+	•	✅ Create automated release script/workflow:
+	•	✅ scripts/upgrade.sh for version upgrades:
+	•	✅ Backs up configuration automatically
+	•	✅ Stops daemon before upgrade
+	•	✅ Installs new binary
+	•	✅ Restarts daemon after upgrade
+	•	✅ Preserves all user settings
+	•	✅ GitHub Actions release workflow:
+	•	✅ Automated build, sign, notarize pipeline
+	•	✅ Creates DMG, PKG, and tarball
+	•	✅ Generates checksums for all artifacts
+	•	✅ Publishes to GitHub Releases with notes
+	•	✅ Document upgrade/uninstall procedures:
+	•	✅ Comprehensive release documentation (docs/RELEASE.md):
+	•	✅ Release formats and their advantages
+	•	✅ Manual release process steps
+	•	✅ Automated CI/CD release process
+	•	✅ Distribution channels (GitHub Releases)
+	•	✅ Upgrade procedures (DMG, PKG, script)
+	•	✅ Configuration preservation during upgrades
+	•	✅ Rollback procedures
+	•	✅ Complete uninstall procedures
+	•	✅ Version management and semantic versioning
+	•	✅ Release checklist for maintainers
+	•	✅ Troubleshooting release issues
+	•	✅ Updated README.md:
+	•	✅ Releases & Distribution section
+	•	✅ Upgrade procedures
+	•	✅ Links to complete documentation
+	•	✅ Tests written & passing:
+	•	✅ CI test job for building release artifacts:
+	•	✅ Matrix strategy tests all installation methods
+	•	✅ Verifies tarball, DMG, and PKG installations
+	•	✅ Checksum verification for all artifacts
+	•	✅ Signature verification
+	•	✅ Basic functionality tests
+	•	✅ Configuration directory checks (PKG)
 
 ⸻
+
+✅ EPIC 5 COMPLETE ✅

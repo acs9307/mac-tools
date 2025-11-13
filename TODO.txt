@@ -1,0 +1,325 @@
+Epic 0 – Project Setup & Definition of Done
+
+Goal: Solid foundation, CI, testing, and a clear Definition of Done (DoD) that enforces test coverage.
+
+Issue 0.1 – Initialize repository & basic project structure
+	•	Create monorepo (e.g. macos-tools) with subtargets:
+	•	CapsLockTuner (keyboard delay tool)
+	•	ScrollMaster (scroll wheel tool)
+	•	DisplayLayouts (display/window layout tool)
+	•	Shared library module for common code
+	•	Decide primary language/tooling (e.g., Swift + SwiftUI + Xcode project/workspace)
+	•	Add .gitignore, LICENSE, README.md
+	•	Add base unit test target(s)
+	•	Tests written & passing
+
+⸻
+
+Issue 0.2 – Define & document Definition of Done (DoD)
+	•	Document repo-wide DoD:
+	•	Every issue must have at least one automated test verifying behavior
+	•	All tests must pass in CI before merging
+	•	Checklists must be fully checked before closing issues
+	•	Add CONTRIBUTING.md describing:
+	•	How to add tests for new features
+	•	Required code review rules
+	•	Tests written & passing (e.g., unit test that validates CI config presence / dummy test verifying test harness runs)
+
+⸻
+
+Issue 0.3 – CI pipeline for macOS builds & tests
+	•	Configure CI (e.g., GitHub Actions) to:
+	•	Build all targets on macOS runner
+	•	Run all unit tests on PR
+	•	Fail on test/code coverage threshold (if using coverage tools)
+	•	Add status badge to README.md
+	•	Tests written & passing (e.g., a failing test initially to confirm CI catches it, then fixed)
+
+⸻
+
+Epic 1 – CapsLock Tuner (Reduced Press Delay)
+
+Goal: Manipulate Caps Lock behavior so it activates with reduced delay / responsiveness, ideally configurable.
+
+Issue 1.1 – Research & design Caps Lock manipulation strategy
+	•	Investigate macOS APIs for keyboard events (e.g., event taps, IOHID, NSEvent)
+	•	Decide design:
+	•	Event tap intercepts Caps Lock and synthesizes modified key events
+	•	Global app, LaunchAgent, or background menu bar app
+	•	Document constraints and OS permission requirements (Accessibility, Input Monitoring)
+	•	Write design doc in /docs/capslock-design.md
+	•	Tests written & passing (e.g., unit tests for config parsing / state machine logic)
+
+⸻
+
+Issue 1.2 – Implement caps lock event interception layer
+	•	Implement low-level event handler for Caps Lock key:
+	•	Capture Caps Lock key down/up
+	•	Maintain internal state machine for “press” vs “hold” vs “repeat”
+	•	Ensure no key events are lost or duplicated
+	•	Add logging hooks for debugging
+	•	Tests written & passing:
+	•	Simulated event stream to validate state transitions
+	•	Verify no double events for rapid taps
+
+⸻
+
+Issue 1.3 – Configurable Caps Lock delay & behavior
+	•	Implement configuration model:
+	•	minPressDuration
+	•	Optional behaviors (e.g., treat quick tap as Escape or Control, etc.) if desired
+	•	Implement loading/saving config (e.g., UserDefaults or config file)
+	•	Add runtime reloading of config without restart (if possible)
+	•	Tests written & passing:
+	•	Unit tests for config parsing / defaults
+	•	Tests for state machine logic under different minPressDuration values
+
+⸻
+
+Issue 1.4 – Menu bar UI for Caps Lock settings
+	•	Create menu bar app UI:
+	•	Toggle enable/disable Caps Lock tuning
+	•	Slider or numeric input for delay
+	•	Status indicator (active/inactive)
+	•	Persist changes from UI to config model
+	•	Ensure app requests necessary permissions and handles denial gracefully
+	•	Tests written & passing:
+	•	UI logic unit tests where possible (e.g., ViewModel)
+	•	Snapshot/behavior tests for configuration updates
+
+⸻
+
+Issue 1.5 – System integration & startup behavior
+	•	Implement LaunchAgent or “Start at login” option for Caps Lock tuner
+	•	Verify behavior after reboot and login
+	•	Provide a simple on/off kill switch
+	•	Tests written & passing:
+	•	At least integration test for startup logic / preferences
+
+⸻
+
+Epic 2 – ScrollMaster (Per-Device Scroll Behavior)
+
+Goal: Control mouse wheel behavior: smooth scrolling and inversion per device.
+
+Issue 2.1 – Device enumeration & identification
+	•	Explore APIs (IOHID, IOKit, etc.) to:
+	•	Enumerate attached mice/pointing devices
+	•	Retrieve stable identifiers (vendor ID, product ID, serial, etc.)
+	•	Build internal representation of “device identity”
+	•	Tests written & passing:
+	•	Unit tests for mapping raw HID info → stable ID
+	•	Fallback behavior if device has limited identifying info
+
+⸻
+
+Issue 2.2 – Core scroll event handling engine
+	•	Implement event tap / event handler for scroll wheel events
+	•	Map incoming events to originating device
+	•	Provide hooks to:
+	•	Modify delta (for smooth scroll)
+	•	Invert direction per device
+	•	Tests written & passing:
+	•	Simulated scroll events from different “devices”
+	•	Verify correct transform/inversion applied
+
+⸻
+
+Issue 2.3 – Smooth scrolling algorithm
+	•	Design smoothing algorithm (e.g., transform discrete wheel ticks into a smoother delta over time)
+	•	Make algorithm parameters configurable (e.g., smoothing factor)
+	•	Ensure performance characteristics are acceptable (no visible lag)
+	•	Tests written & passing:
+	•	Unit tests for algorithm (input tick sequence → expected smoothed sequence)
+	•	Edge cases (fast scroll bursts, tiny deltas)
+
+⸻
+
+Issue 2.4 – Per-device configuration model & storage
+	•	Define configuration schema:
+	•	Device ID → { invert: bool, smoothEnabled: bool, smoothParams: … }
+	•	Implement config persistence
+	•	Implement “fallback” profile for unknown devices
+	•	Tests written & passing:
+	•	Config save/load
+	•	Correct profile selection per device ID
+
+⸻
+
+Issue 2.5 – UI for per-device scroll settings
+	•	Build UI listing detected devices and their settings:
+	•	Toggle inversion
+	•	Enable/disable smooth scrolling
+	•	Adjust smoothing strength
+	•	Handle devices appearing/disappearing at runtime
+	•	Tests written & passing:
+	•	ViewModel tests for device list updates
+	•	Tests for correct binding of UI settings → config model
+
+⸻
+
+Issue 2.6 – Safety & compatibility testing
+	•	Test compatibility with:
+	•	Magic Mouse / Trackpad
+	•	Common third-party mice
+	•	Add a global emergency “disable all modifications” shortcut
+	•	Document known limitations and troubleshooting steps
+	•	Tests written & passing:
+	•	Regression test to ensure global disable bypasses transformations
+
+⸻
+
+Epic 3 – DisplayLayouts (Display Detection & Auto-Window Arrangement)
+
+Goal: Detect display configurations and auto-arrange windows based on pre-configured layouts.
+
+Issue 3.1 – Discover displays & configuration description
+	•	Use macOS display APIs to:
+	•	Enumerate connected displays
+	•	Get resolution, scaling, and relative positions
+	•	Define a “display configuration” signature:
+	•	E.g., sorted list of displays with IDs + geometry → hash
+	•	Tests written & passing:
+	•	Unit tests for hashing logic (same physical layout → same signature)
+	•	Handling of minor resolution changes (retina scaling etc.)
+
+⸻
+
+Issue 3.2 – Detect configuration changes & trigger events
+	•	Implement listener for:
+	•	Display connect/disconnect
+	•	Resolution/arrangement changes
+	•	Dispatch internal “configuration changed” events
+	•	Tests written & passing:
+	•	Mock events → correct internal notifications
+	•	Debouncing logic (avoid spamming rearrange on rapid changes)
+
+⸻
+
+Issue 3.3 – Window management engine
+	•	Use Accessibility API (or WindowServer appropriate APIs) to:
+	•	Enumerate application windows
+	•	Move/resize windows to target frames on target displays
+	•	Abstract “window layout” as data:
+	•	App identifier + window role → position & size on particular display
+	•	Tests written & passing:
+	•	Unit tests for layout calculation given display config
+	•	Mock windows for verifying target frames
+
+⸻
+
+Issue 3.4 – Layout presets per display configuration
+	•	Define layout preset model:
+	•	displayConfigSignature → [windowLayoutRules]
+	•	Implement:
+	•	Save current window arrangement as a preset
+	•	Apply preset when configuration is detected
+	•	Tests written & passing:
+	•	Save/apply round-trip tests
+	•	Behavior when preset missing or incomplete
+
+⸻
+
+Issue 3.5 – UI for display layouts & presets
+	•	Build UI to:
+	•	Show current display configuration
+	•	List available presets for the config
+	•	Create/edit/delete presets
+	•	Allow “simulate apply” mode for previewing
+	•	Tests written & passing:
+	•	ViewModel unit tests for preset selection and editing
+	•	Validation tests for preventing invalid layouts
+
+⸻
+
+Issue 3.6 – Auto-apply and safety mechanisms
+	•	Implement auto-apply option:
+	•	Automatically apply preset when a known configuration is detected
+	•	Add “undo last layout change” feature (if possible)
+	•	Provide global toggle for auto-apply
+	•	Tests written & passing:
+	•	Ensure auto-apply respects global toggle
+	•	Undo behavior tests at logic level
+
+⸻
+
+Epic 4 – Cross-Cutting Concerns: Permissions, Logging, Telemetry
+
+Goal: Shared infra for permissions, logging, and optional telemetry.
+
+Issue 4.1 – Permissions & onboarding flow
+	•	Create shared onboarding flow to:
+	•	Request Accessibility permissions
+	•	Request Input Monitoring (as needed)
+	•	Provide clear instructions when permissions are denied
+	•	Tests written & passing:
+	•	State machine tests for permission status transitions
+
+⸻
+
+Issue 4.2 – Unified logging & debug tools
+	•	Implement shared logging system:
+	•	Log key events (without sensitive data)
+	•	Log display changes & layout applications
+	•	Option to export logs for troubleshooting
+	•	Tests written & passing:
+	•	Logging behavior tests (levels, categories)
+
+⸻
+
+Issue 4.3 – Optional metrics/telemetry module (local only or opt-in)
+	•	Define minimal, privacy-respecting metrics (e.g., feature usage counts)
+	•	Implement opt-in toggle; disabled by default
+	•	Tests written & passing:
+	•	Ensure no data collected when disabled
+	•	Metrics aggregation logic tests
+
+⸻
+
+Epic 5 – Documentation, Packaging & Release
+
+Goal: Make it easy to understand, install, and trust these tools.
+
+Issue 5.1 – Developer documentation
+	•	Write architecture overview (/docs/architecture.md)
+	•	Document each module:
+	•	CapsLockTuner
+	•	ScrollMaster
+	•	DisplayLayouts
+	•	Add “How to add tests for new features” section
+	•	Tests written & passing:
+	•	If using doc tests / sample code snippets, ensure they compile/run
+
+⸻
+
+Issue 5.2 – User documentation & onboarding guide
+	•	Add user guide with:
+	•	Installation instructions
+	•	Permissions explanations
+	•	Feature walkthroughs
+	•	Troubleshooting FAQ
+	•	Add screenshots/gifs where appropriate
+	•	Tests written & passing:
+	•	Ensure any example commands in docs are covered by tests or scripts
+
+⸻
+
+Issue 5.3 – Code signing & notarization setup
+	•	Configure macOS code signing for binaries/apps
+	•	Set up notarization workflow for releases
+	•	Verify install experience on a “clean” macOS account
+	•	Tests written & passing:
+	•	Scripted test for signing/notarization pipeline where feasible
+
+⸻
+
+Issue 5.4 – Release packaging & distribution
+	•	Define release format(s):
+	•	Signed .dmg or .pkg
+	•	GitHub Releases
+	•	Create automated release script/workflow
+	•	Document upgrade/uninstall procedures
+	•	Tests written & passing:
+	•	CI test job for building release artifacts
+
+⸻

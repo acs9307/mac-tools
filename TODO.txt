@@ -464,13 +464,51 @@ Goal: Shared infra for permissions, logging, and optional telemetry.
 
 ⸻
 
-Issue 4.2 – Unified logging & debug tools
-	•	Implement shared logging system:
-	•	Log key events (without sensitive data)
-	•	Log display changes & layout applications
-	•	Option to export logs for troubleshooting
-	•	Tests written & passing:
-	•	Logging behavior tests (levels, categories)
+✅ Issue 4.2 – Unified logging & debug tools [COMPLETED]
+	•	✅ Implement shared logging system:
+	•	✅ LogCategory enum for organizing logs by feature
+	•	✅ LogLevel enum with severity comparison
+	•	✅ LogEntry struct with timestamps, metadata, and formatting
+	•	✅ SensitiveDataFilter for automatic data redaction:
+	•	✅ Redacts passwords, tokens, emails, file paths
+	•	✅ Pattern-based detection and replacement
+	•	✅ containsSensitiveData() check method
+	•	✅ LogManager for centralized log management:
+	•	✅ ObservableObject for SwiftUI integration
+	•	✅ Thread-safe concurrent queue operations
+	•	✅ In-memory log storage with configurable limits
+	•	✅ File-based logging with automatic rotation
+	•	✅ Minimum log level filtering
+	•	✅ Automatic sensitive data redaction (optional)
+	•	✅ Integration with swift-log (LoggingSystem.bootstrap)
+	•	✅ Log key events (without sensitive data):
+	•	✅ Custom MacToolsLogHandler for swift-log
+	•	✅ Automatic category detection from logger labels
+	•	✅ File, function, and line number tracking
+	•	✅ Log display changes & layout applications:
+	•	✅ Category-based filtering in queries
+	•	✅ Statistics by category
+	•	✅ Option to export logs for troubleshooting:
+	•	✅ Export as plain text with formatting
+	•	✅ Export as JSON with full metadata
+	•	✅ Query logs by category, level, date, limit
+	•	✅ LogStatistics for aggregated metrics
+	•	✅ LogViewerView with SwiftUI:
+	•	✅ Real-time log display with auto-scroll
+	•	✅ Category and level filtering
+	•	✅ Search functionality
+	•	✅ Visual indicators by log level
+	•	✅ Statistics dashboard
+	•	✅ Export options (text and JSON)
+	•	✅ Clear logs functionality
+	•	✅ Tests written & passing:
+	•	✅ LogCategoryTests (9 tests): Labels, display names, Codable
+	•	✅ LogLevelTests (11 tests): Display names, comparisons, Codable
+	•	✅ LogEntryTests (9 tests): Creation, formatting, Codable
+	•	✅ SensitiveDataFilterTests (13 tests): Redaction, detection, patterns
+	•	✅ LogManagerTests (21 tests): Logging, filtering, querying, export, statistics
+	•	✅ LogStatisticsTests (1 test): Initialization
+	•	✅ Logging behavior tests (levels, categories)
 
 ⸻
 

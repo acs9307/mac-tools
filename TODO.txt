@@ -295,15 +295,29 @@ Goal: Detect display configurations and auto-arrange windows based on pre-config
 
 ⸻
 
-Issue 3.4 – Layout presets per display configuration
-	•	Define layout preset model:
-	•	displayConfigSignature → [windowLayoutRules]
-	•	Implement:
-	•	Save current window arrangement as a preset
-	•	Apply preset when configuration is detected
-	•	Tests written & passing:
-	•	Save/apply round-trip tests
-	•	Behavior when preset missing or incomplete
+✅ Issue 3.4 – Layout presets per display configuration [COMPLETED]
+	•	✅ Define layout preset model:
+	•	✅ displayConfigSignature → [windowLayoutRules]
+	•	✅ WindowLayoutPreset with per-configuration storage
+	•	✅ WindowLayoutPresetManager for preset management
+	•	✅ Implement save current window arrangement:
+	•	✅ LayoutPresetCapture for capturing layouts
+	•	✅ captureCurrentLayout() with optional filtering
+	•	✅ captureLayout(forApplications:) for app-specific capture
+	•	✅ captureLayout(excludingApplications:) for exclusion
+	•	✅ Automatic display assignment for windows
+	•	✅ Excludes minimized/hidden windows by default
+	•	✅ Implement apply preset when configuration detected:
+	•	✅ LayoutPresetAutomation with auto-apply support
+	•	✅ applyPreset(for:) manual application
+	•	✅ handleConfigurationChange() for automatic triggering
+	•	✅ Configurable delay before application
+	•	✅ PresetValidation for preset validation
+	•	✅ Tests written & passing:
+	•	✅ LayoutPresetCaptureTests (11 tests): Capture, filtering, display assignment
+	•	✅ PresetValidationTests (4 tests): Empty, valid, invalid, missing windows
+	•	✅ LayoutPresetAutomationTests (5 tests): Auto-apply, missing presets
+	•	✅ LayoutPresetRoundTripTests (2 tests): Full save/apply cycle, partial application
 
 ⸻
 

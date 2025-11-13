@@ -125,15 +125,17 @@ Goal: Control mouse wheel behavior: smooth scrolling and inversion per device.
 
 ⸻
 
-Issue 2.2 – Core scroll event handling engine
-	•	Implement event tap / event handler for scroll wheel events
-	•	Map incoming events to originating device
-	•	Provide hooks to:
-	•	Modify delta (for smooth scroll)
-	•	Invert direction per device
-	•	Tests written & passing:
-	•	Simulated scroll events from different “devices”
-	•	Verify correct transform/inversion applied
+✅ Issue 2.2 – Core scroll event handling engine [COMPLETED]
+	•	✅ Implement event tap / event handler for scroll wheel events (ScrollEventHandler)
+	•	✅ Map incoming events to originating device (ScrollEvent with deviceID)
+	•	✅ Provide hooks to:
+	•	✅ Modify delta via ScrollTransform (vertical/horizontal multipliers)
+	•	✅ Invert direction per device (invertVertical/invertHorizontal)
+	•	✅ Per-device configuration registry (ScrollConfigurationRegistry)
+	•	✅ Tests written & passing:
+	•	✅ ScrollTransformTests (34 tests): Transform application, inversion, multipliers
+	•	✅ ScrollEventTests (9 tests): Event creation, transform application
+	•	✅ ScrollConfigurationTests (29 tests): Registry operations, thread safety
 
 ⸻
 

@@ -11,6 +11,7 @@ public final class CapsLockAgent: BaseAgent {
     private var stateMachine: KeyStateMachine
     private var eventSynthesizer: EventSynthesizer
     private var configuration: CapsLockConfiguration
+    private let configurationManager: CapsLockConfigurationManager
     private let logger: Logger
 
     // Caps Lock virtual key code on macOS
@@ -18,13 +19,22 @@ public final class CapsLockAgent: BaseAgent {
 
     // MARK: - Initialization
 
-    public init(configuration: CapsLockConfiguration = .default) {
+    /// Initialize with a specific configuration (useful for testing)
+    public init(configuration: CapsLockConfiguration) {
         self.configuration = configuration
+        self.configurationManager = CapsLockConfigurationManager()
         self.stateMachine = KeyStateMachine(configuration: configuration)
         self.eventSynthesizer = EventSynthesizer()
         self.logger = Logger(label: "com.mactools.capslock")
 
         super.init(identifier: "com.mactools.capslock", name: "Caps Lock Agent")
+    }
+
+    /// Initialize by loading configuration from persistent storage
+    public convenience init() {
+        let manager = CapsLockConfigurationManager()
+        let config = manager.load()
+        self.init(configuration: config)
     }
 
     // MARK: - Agent Lifecycle
@@ -161,11 +171,11 @@ public final class CapsLockAgent: BaseAgent {
         configuration
     }
 
-    /// Update configuration
+    /// Update configuration (in-memory only)
     public func updateConfiguration(_ newConfig: CapsLockConfiguration) async throws {
         configuration = newConfig
         stateMachine = KeyStateMachine(configuration: newConfig)
-        logger.info("Configuration updated")
+        logger.info("Configuration updated (in-memory)")
 
         // If agent is running and configuration changed, restart if needed
         if isRunning {
@@ -180,5 +190,25 @@ public final class CapsLockAgent: BaseAgent {
             // Need to start
             try await start()
         }
+    }
+
+    /// Update configuration and persist to storage
+    public func updateAndSaveConfiguration(_ newConfig: CapsLockConfiguration) async throws {
+        try configurationManager.save(newConfig)
+        try await updateConfiguration(newConfig)
+        logger.info("Configuration updated and saved")
+    }
+
+    /// Reload configuration from persistent storage
+    public func reloadConfiguration() async throws {
+        let newConfig = configurationManager.load()
+        try await updateConfiguration(newConfig)
+        logger.info("Configuration reloaded from storage")
+    }
+
+    /// Save current configuration to persistent storage
+    public func saveConfiguration() throws {
+        try configurationManager.save(configuration)
+        logger.info("Configuration saved to storage")
     }
 }

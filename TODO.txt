@@ -68,15 +68,17 @@ Goal: Manipulate Caps Lock behavior so it activates with reduced delay / respons
 
 ⸻
 
-Issue 1.3 – Configurable Caps Lock delay & behavior
-	•	Implement configuration model:
-	•	minPressDuration
-	•	Optional behaviors (e.g., treat quick tap as Escape or Control, etc.) if desired
-	•	Implement loading/saving config (e.g., UserDefaults or config file)
-	•	Add runtime reloading of config without restart (if possible)
-	•	Tests written & passing:
-	•	Unit tests for config parsing / defaults
-	•	Tests for state machine logic under different minPressDuration values
+✅ Issue 1.3 – Configurable Caps Lock delay & behavior [COMPLETED]
+	•	✅ Implement configuration model:
+	•	✅ minPressDuration (configurable timing threshold)
+	•	✅ Optional behaviors: quickTapAction and longPressAction
+	•	✅ Support sendKey, sendModifier, or disabled actions
+	•	✅ Implement loading/saving config via JSON file (~/.config/mactools/config.json)
+	•	✅ Add runtime reloading without restart (reloadConfiguration method)
+	•	✅ Integration with MacToolsCore Configuration system
+	•	✅ Tests written & passing:
+	•	✅ CapsLockConfigurationManagerTests (32 tests): Parsing, serialization, persistence
+	•	✅ ConfigurationReloadTests (20 tests): Runtime reload, save/load, workflows
 
 ⸻
 

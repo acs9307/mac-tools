@@ -571,15 +571,40 @@ Epic 5 – Documentation, Packaging & Release
 
 Goal: Make it easy to understand, install, and trust these tools.
 
-Issue 5.1 – Developer documentation
-	•	Write architecture overview (/docs/architecture.md)
-	•	Document each module:
-	•	CapsLockTuner
-	•	ScrollMaster
-	•	DisplayLayouts
-	•	Add “How to add tests for new features” section
-	•	Tests written & passing:
-	•	If using doc tests / sample code snippets, ensure they compile/run
+✅ Issue 5.1 – Developer documentation [COMPLETED]
+	•	✅ Write architecture overview (/docs/architecture.md):
+	•	✅ System architecture diagram
+	•	✅ Core components overview
+	•	✅ Data flow and threading model
+	•	✅ Configuration system
+	•	✅ Permission requirements
+	•	✅ Testing strategy
+	•	✅ Build system and project structure
+	•	✅ Document each module:
+	•	✅ CapsLockTuner (existing: docs/capslock-design.md)
+	•	✅ ScrollMaster (existing: docs/scrollmaster.md)
+	•	✅ DisplayLayouts (new: docs/displayLayouts.md):
+	•	✅ Architecture and components
+	•	✅ Display detection and stable IDs
+	•	✅ Window management via Accessibility API
+	•	✅ Layout presets and auto-apply
+	•	✅ Undo/redo system
+	•	✅ Safety features and validation
+	•	✅ Configuration and CLI usage
+	•	✅ Troubleshooting guide
+	•	✅ Add "How to add tests for new features" section:
+	•	✅ Comprehensive testing guide (docs/testing.md)
+	•	✅ Testing philosophy and Definition of Done
+	•	✅ Unit, integration, and UI testing strategies
+	•	✅ Test structure and organization
+	•	✅ Common patterns (Arrange-Act-Assert)
+	•	✅ Mocking system APIs (CGEventTap, IOKit)
+	•	✅ Running tests and code coverage
+	•	✅ Best practices and checklist
+	•	✅ Common test scenarios with examples
+	•	✅ Tests written & passing:
+	•	✅ All code examples in docs are consistent with actual implementation
+	•	✅ No doc tests needed (documentation only)
 
 ⸻
 

@@ -2,28 +2,28 @@ Epic 0 – Project Setup & Definition of Done
 
 Goal: Solid foundation, CI, testing, and a clear Definition of Done (DoD) that enforces test coverage.
 
-Issue 0.1 – Initialize repository & basic project structure
-	•	Create monorepo (e.g. macos-tools) with subtargets:
-	•	CapsLockTuner (keyboard delay tool)
-	•	ScrollMaster (scroll wheel tool)
-	•	DisplayLayouts (display/window layout tool)
-	•	Shared library module for common code
-	•	Decide primary language/tooling (e.g., Swift + SwiftUI + Xcode project/workspace)
-	•	Add .gitignore, LICENSE, README.md
-	•	Add base unit test target(s)
-	•	Tests written & passing
+✅ Issue 0.1 – Initialize repository & basic project structure [COMPLETED]
+	•	✅ Create monorepo (MacTools) with subtargets:
+	•	MacToolsCore (core daemon infrastructure)
+	•	KeyManipulation (key manipulation module)
+	•	WindowManipulation (window manipulation module)
+	•	MacToolsCLI (CLI interface)
+	•	✅ Decided on Swift + SwiftUI + Swift Package Manager
+	•	✅ Add .gitignore, LICENSE, README.md
+	•	✅ Add base unit test target(s)
+	•	✅ Tests written & passing (7 test files across 3 test targets)
 
 ⸻
 
-Issue 0.2 – Define & document Definition of Done (DoD)
-	•	Document repo-wide DoD:
-	•	Every issue must have at least one automated test verifying behavior
-	•	All tests must pass in CI before merging
-	•	Checklists must be fully checked before closing issues
-	•	Add CONTRIBUTING.md describing:
-	•	How to add tests for new features
-	•	Required code review rules
-	•	Tests written & passing (e.g., unit test that validates CI config presence / dummy test verifying test harness runs)
+✅ Issue 0.2 – Define & document Definition of Done (DoD) [COMPLETED]
+	•	✅ Document repo-wide DoD:
+	•	✅ Every issue must have at least one automated test verifying behavior
+	•	✅ All tests must pass in CI before merging (documented in CONTRIBUTING.md)
+	•	✅ Checklists must be fully checked before closing issues
+	•	✅ Add CONTRIBUTING.md describing:
+	•	✅ How to add tests for new features (section "Testing Requirements")
+	•	✅ Required code review rules (section "Pull Request Process")
+	•	✅ Tests written & passing (test harness verified with 7 test files)
 
 ⸻
 

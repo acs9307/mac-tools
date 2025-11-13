@@ -512,12 +512,58 @@ Goal: Shared infra for permissions, logging, and optional telemetry.
 
 ⸻
 
-Issue 4.3 – Optional metrics/telemetry module (local only or opt-in)
-	•	Define minimal, privacy-respecting metrics (e.g., feature usage counts)
-	•	Implement opt-in toggle; disabled by default
-	•	Tests written & passing:
-	•	Ensure no data collected when disabled
-	•	Metrics aggregation logic tests
+✅ Issue 4.3 – Optional metrics/telemetry module (local only or opt-in) [COMPLETED]
+	•	✅ Define minimal, privacy-respecting metrics:
+	•	✅ MetricType enum with feature-specific events
+	•	✅ MetricCategory for grouping (capsLock, scroll, layouts, permissions, general)
+	•	✅ Feature usage counts only - no personal data
+	•	✅ Categories: Caps Lock, Scroll Master, Display Layouts, Permissions, General
+	•	✅ MetricEvent struct with timestamps and optional metadata
+	•	✅ MetricAggregate for counting and date tracking
+	•	✅ TelemetryStatistics for overall metrics
+	•	✅ Implement opt-in toggle; disabled by default:
+	•	✅ TelemetryConfiguration with enabled flag (default: false)
+	•	✅ enableTelemetry() and disableTelemetry() methods
+	•	✅ No events recorded when disabled
+	•	✅ Configurable retention period (7/30/90/180 days or forever)
+	•	✅ Configurable max events in memory
+	•	✅ Optional disk persistence
+	•	✅ TelemetryManager for data collection:
+	•	✅ ObservableObject for SwiftUI integration
+	•	✅ Thread-safe concurrent queue operations
+	•	✅ recordEvent() only when enabled
+	•	✅ Local-only storage (no external servers)
+	•	✅ JSON persistence to disk
+	•	✅ Query events by type, category, date, limit
+	•	✅ Aggregate metrics by type
+	•	✅ Overall statistics calculation
+	•	✅ Export events and statistics as JSON
+	•	✅ Retention policy enforcement
+	•	✅ Privacy features:
+	•	✅ Disabled by default (opt-in required)
+	•	✅ Local-only storage
+	•	✅ No personal information collected
+	•	✅ No data sent to external servers
+	•	✅ Clear data anytime
+	•	✅ TelemetryViewerView with SwiftUI:
+	•	✅ Overview statistics dashboard
+	•	✅ Category-based filtering
+	•	✅ Aggregated metrics display
+	•	✅ Settings panel with privacy notice
+	•	✅ Enable/disable toggle
+	•	✅ Retention period configuration
+	•	✅ Export functionality
+	•	✅ Clear data option
+	•	✅ Tests written & passing:
+	•	✅ MetricTypeTests (7 tests): Categories, display names, Codable
+	•	✅ MetricCategoryTests (2 tests): Display names, Codable
+	•	✅ MetricEventTests (3 tests): Creation, metadata, Codable
+	•	✅ MetricAggregateTests (7 tests): Event counting, timestamps, Codable
+	•	✅ TelemetryConfigurationTests (3 tests): Defaults, custom values, Codable
+	•	✅ TelemetryManagerTests (23 tests): Enable/disable, recording, querying, aggregates, statistics, export
+	•	✅ TelemetryStatisticsTests (2 tests): Initialization, Codable
+	•	✅ Ensure no data collected when disabled
+	•	✅ Metrics aggregation logic tests
 
 ⸻
 

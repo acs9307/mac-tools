@@ -82,16 +82,41 @@ Goal: Manipulate Caps Lock behavior so it activates with reduced delay / respons
 
 ⸻
 
-Issue 1.4 – Menu bar UI for Caps Lock settings
-	•	Create menu bar app UI:
-	•	Toggle enable/disable Caps Lock tuning
-	•	Slider or numeric input for delay
-	•	Status indicator (active/inactive)
-	•	Persist changes from UI to config model
-	•	Ensure app requests necessary permissions and handles denial gracefully
-	•	Tests written & passing:
-	•	UI logic unit tests where possible (e.g., ViewModel)
-	•	Snapshot/behavior tests for configuration updates
+✅ Issue 1.4 – Menu bar UI for Caps Lock settings [COMPLETED]
+	•	✅ Create menu bar app UI:
+	•	✅ Toggle enable/disable Caps Lock tuning
+	•	✅ Slider for delay adjustment (0.05s - 2.0s)
+	•	✅ Increment/decrement buttons for fine control
+	•	✅ Status indicator (active/inactive/warning/error)
+	•	✅ Quick tap action picker (Escape, Delete, Control, etc.)
+	•	✅ Long press action picker (Control, Command, Option, etc.)
+	•	✅ Disable original Caps Lock toggle
+	•	✅ Agent control (start/stop/restart)
+	•	✅ Persist changes from UI to config model:
+	•	✅ Automatic save on configuration changes
+	•	✅ Integration with CapsLockAgent
+	•	✅ JSON persistence via Configuration system
+	•	✅ Ensure app requests necessary permissions:
+	•	✅ Accessibility permissions check
+	•	✅ Permission request with system dialog
+	•	✅ Clear instructions for user
+	•	✅ Graceful handling of permission denial
+	•	✅ CapsLockViewModel for UI business logic:
+	•	✅ State management (enabled, delay, actions, status)
+	•	✅ Configuration load/save/apply
+	•	✅ Toggle actions for all settings
+	•	✅ Delay adjustment with clamping
+	•	✅ Agent control methods
+	•	✅ Permission handling
+	•	✅ Status description and color coding
+	•	✅ CapsLockView with SwiftUI:
+	•	✅ Complete settings interface
+	•	✅ Status indicator with color coding
+	•	✅ Accessibility permissions prompt
+	•	✅ Error handling display
+	•	✅ All configuration sections
+	•	✅ Tests written & passing:
+	•	✅ CapsLockViewModelTests (35 tests): All UI logic, configuration, persistence
 
 ⸻
 

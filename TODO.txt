@@ -221,15 +221,25 @@ Epic 3 – DisplayLayouts (Display Detection & Auto-Window Arrangement)
 
 Goal: Detect display configurations and auto-arrange windows based on pre-configured layouts.
 
-Issue 3.1 – Discover displays & configuration description
-	•	Use macOS display APIs to:
-	•	Enumerate connected displays
-	•	Get resolution, scaling, and relative positions
-	•	Define a “display configuration” signature:
-	•	E.g., sorted list of displays with IDs + geometry → hash
-	•	Tests written & passing:
-	•	Unit tests for hashing logic (same physical layout → same signature)
-	•	Handling of minor resolution changes (retina scaling etc.)
+✅ Issue 3.1 – Discover displays & configuration description [COMPLETED]
+	•	✅ Use macOS display APIs:
+	•	✅ Enumerate connected displays via CGGetActiveDisplayList
+	•	✅ Get resolution, scaling (backing scale factor), and relative positions
+	•	✅ Extract vendor ID, model ID, serial number via IOKit
+	•	✅ Extract display name via IODisplayCreateInfoDictionary
+	•	✅ DisplayIdentity struct with stable identification:
+	•	✅ Stable ID format: vendorID-modelID[-serial]
+	•	✅ Hash based on stable ID (not transient display ID)
+	•	✅ Tracks bounds, scale, name, and main display status
+	•	✅ Display configuration signature:
+	•	✅ Sorted list of displays with stable IDs + geometry
+	•	✅ Deterministic hash generation (same physical layout → same signature)
+	•	✅ DisplayConfiguration.matches() for fuzzy comparison
+	•	✅ Bounding rect and total area calculations
+	•	✅ Tests written & passing:
+	•	✅ DisplayIdentityTests (52 tests): Hashing, equality, stable IDs, codability
+	•	✅ Same physical layout produces same signature
+	•	✅ Minor resolution changes handled with tolerance matching
 
 ⸻
 

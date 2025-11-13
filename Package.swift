@@ -64,6 +64,13 @@ let package = Package(
             path: "Sources/ScrollMaster"
         ),
 
+        // Display layouts module
+        .target(
+            name: "DisplayLayouts",
+            dependencies: ["MacToolsCore"],
+            path: "Sources/DisplayLayouts"
+        ),
+
         // CLI executable
         .executableTarget(
             name: "MacToolsCLI",
@@ -102,6 +109,11 @@ let package = Package(
             name: "ScrollMasterTests",
             dependencies: ["ScrollMaster", "MacToolsCore"],
             path: "Tests/ScrollMasterTests"
+        ),
+        .testTarget(
+            name: "DisplayLayoutsTests",
+            dependencies: ["DisplayLayouts", "MacToolsCore"],
+            path: "Tests/DisplayLayoutsTests"
         ),
     ]
 )

@@ -61,6 +61,26 @@ public struct DisplayLayoutsView: View {
             Spacer()
 
             HStack(spacing: 12) {
+                // Undo/Redo buttons
+                HStack(spacing: 4) {
+                    Button(action: viewModel.undo) {
+                        Image(systemName: "arrow.uturn.backward")
+                            .font(.system(size: 16))
+                    }
+                    .disabled(!viewModel.canUndo)
+                    .help(viewModel.canUndo ? "Undo: \(viewModel.undoActionName ?? "")" : "Undo")
+
+                    Button(action: viewModel.redo) {
+                        Image(systemName: "arrow.uturn.forward")
+                            .font(.system(size: 16))
+                    }
+                    .disabled(!viewModel.canRedo)
+                    .help(viewModel.canRedo ? "Redo: \(viewModel.redoActionName ?? "")" : "Redo")
+                }
+
+                Divider()
+                    .frame(height: 20)
+
                 Toggle("Auto-apply", isOn: $viewModel.autoApplyEnabled)
                     .onChange(of: viewModel.autoApplyEnabled) { _ in
                         viewModel.toggleAutoApply()

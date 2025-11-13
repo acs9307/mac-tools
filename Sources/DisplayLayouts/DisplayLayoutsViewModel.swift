@@ -14,6 +14,10 @@ public final class DisplayLayoutsViewModel: ObservableObject {
     @Published public private(set) var isLoading: Bool = false
     @Published public private(set) var error: String?
     @Published public private(set) var lastApplyResult: WindowLayoutBatchResult?
+    @Published public private(set) var canUndo: Bool = false
+    @Published public private(set) var canRedo: Bool = false
+    @Published public private(set) var undoActionName: String?
+    @Published public private(set) var redoActionName: String?
 
     // MARK: - Dependencies
 
@@ -22,6 +26,8 @@ public final class DisplayLayoutsViewModel: ObservableObject {
     private let presetManager: WindowLayoutPresetManager
     private let presetCapture: LayoutPresetCapture
     private let automation: LayoutPresetAutomation
+    private let undoManager: LayoutUndoManager
+    private let safetyChecker: LayoutSafetyChecker
 
     // MARK: - Initialization
 
@@ -30,7 +36,9 @@ public final class DisplayLayoutsViewModel: ObservableObject {
         displayEnumerator: DisplayEnumerator = DisplayEnumerator(),
         presetManager: WindowLayoutPresetManager = WindowLayoutPresetManager(),
         presetCapture: LayoutPresetCapture? = nil,
-        automation: LayoutPresetAutomation? = nil
+        automation: LayoutPresetAutomation? = nil,
+        undoManager: LayoutUndoManager? = nil,
+        safetyChecker: LayoutSafetyChecker? = nil
     ) {
         self.windowManager = windowManager
         self.displayEnumerator = displayEnumerator
@@ -43,8 +51,21 @@ public final class DisplayLayoutsViewModel: ObservableObject {
             windowManager: windowManager,
             presetManager: presetManager
         )
+        self.undoManager = undoManager ?? LayoutUndoManager(windowManager: windowManager)
+        self.safetyChecker = safetyChecker ?? LayoutSafetyChecker()
 
         loadCurrentState()
+        updateUndoState()
+    }
+
+    // MARK: - Undo State Management
+
+    /// Update undo/redo state from undo manager
+    private func updateUndoState() {
+        canUndo = undoManager.canUndo
+        canRedo = undoManager.canRedo
+        undoActionName = undoManager.undoActionName
+        redoActionName = undoManager.redoActionName
     }
 
     // MARK: - State Management
@@ -165,8 +186,27 @@ public final class DisplayLayoutsViewModel: ObservableObject {
     public func applyPreset(_ preset: WindowLayoutPreset) {
         error = nil
 
+        // Validate safety first
+        if let config = currentConfiguration {
+            let safetyResult = safetyChecker.validatePresetSafety(preset, displays: config.displays)
+            if !safetyResult.isSafe {
+                error = "Preset contains unsafe window positions. Some windows may be off-screen."
+                // Continue anyway but warn the user
+            }
+        }
+
+        // Save state for undo
+        do {
+            try undoManager.saveStateBeforeChange(name: "Before applying '\(preset.name)'")
+        } catch {
+            // Continue anyway, but undo won't be available
+        }
+
         let result = windowManager.applyPreset(preset)
         lastApplyResult = result
+
+        // Update undo state
+        updateUndoState()
 
         if result.allSucceeded {
             error = nil
@@ -253,6 +293,56 @@ public final class DisplayLayoutsViewModel: ObservableObject {
     /// Clear last apply result
     public func clearLastResult() {
         lastApplyResult = nil
+    }
+
+    // MARK: - Undo/Redo
+
+    /// Undo last layout change
+    public func undo() {
+        error = nil
+
+        do {
+            let result = try undoManager.undo()
+            lastApplyResult = result
+
+            // Update undo state
+            updateUndoState()
+
+            if result.allSucceeded {
+                error = nil
+            } else {
+                error = "Some windows failed to restore: \(result.failureCount) of \(result.results.count)"
+            }
+        } catch {
+            self.error = "Failed to undo: \(error.localizedDescription)"
+        }
+    }
+
+    /// Redo last undone change
+    public func redo() {
+        error = nil
+
+        do {
+            let result = try undoManager.redo()
+            lastApplyResult = result
+
+            // Update undo state
+            updateUndoState()
+
+            if result.allSucceeded {
+                error = nil
+            } else {
+                error = "Some windows failed to restore: \(result.failureCount) of \(result.results.count)"
+            }
+        } catch {
+            self.error = "Failed to redo: \(error.localizedDescription)"
+        }
+    }
+
+    /// Clear undo history
+    public func clearUndoHistory() {
+        undoManager.clearAll()
+        updateUndoState()
     }
 }
 

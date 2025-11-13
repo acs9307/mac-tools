@@ -386,14 +386,37 @@ Goal: Detect display configurations and auto-arrange windows based on pre-config
 
 ⸻
 
-Issue 3.6 – Auto-apply and safety mechanisms
-	•	Implement auto-apply option:
-	•	Automatically apply preset when a known configuration is detected
-	•	Add “undo last layout change” feature (if possible)
-	•	Provide global toggle for auto-apply
-	•	Tests written & passing:
-	•	Ensure auto-apply respects global toggle
-	•	Undo behavior tests at logic level
+✅ Issue 3.6 – Auto-apply and safety mechanisms [COMPLETED]
+	•	✅ Implement auto-apply option:
+	•	✅ Auto-apply toggle in DisplayLayoutsView header
+	•	✅ LayoutPresetAutomation with automatic preset application
+	•	✅ Automatic application when known configuration detected
+	•	✅ Configurable delay before application
+	•	✅ Global toggle integration with DisplayLayoutsViewModel
+	•	✅ Add "undo last layout change" feature:
+	•	✅ LayoutUndoManager with undo/redo stack management
+	•	✅ Snapshot capture before layout changes
+	•	✅ Maximum undo states limit (configurable, default 10)
+	•	✅ LayoutSnapshot and WindowState for state persistence
+	•	✅ Undo/redo methods in DisplayLayoutsViewModel
+	•	✅ UI buttons in DisplayLayoutsView header
+	•	✅ Action name display in button tooltips
+	•	✅ Disabled state when undo/redo unavailable
+	•	✅ Safety mechanisms:
+	•	✅ LayoutSafetyChecker for frame validation
+	•	✅ Frame size validation (minimum/maximum dimensions)
+	•	✅ Display bounds intersection checking
+	•	✅ Offscreen window detection
+	•	✅ Frame correction for unsafe layouts
+	•	✅ Safety validation in preset application workflow
+	•	✅ Integration with DisplayLayoutsViewModel
+	•	✅ Tests written & passing:
+	•	✅ LayoutUndoTests (45 tests): Snapshot capture, undo/redo, stack management
+	•	✅ LayoutSafetyCheckerTests (28 tests): Frame validation, safety checks, correction
+	•	✅ Auto-apply respects global toggle (via existing automation tests)
+	•	✅ Undo/redo behavior tests at logic level
+	•	✅ Error handling for empty stacks
+	•	✅ Codable conformance for persistence
 
 ⸻
 

@@ -321,15 +321,43 @@ Goal: Detect display configurations and auto-arrange windows based on pre-config
 
 ⸻
 
-Issue 3.5 – UI for display layouts & presets
-	•	Build UI to:
-	•	Show current display configuration
-	•	List available presets for the config
-	•	Create/edit/delete presets
-	•	Allow “simulate apply” mode for previewing
-	•	Tests written & passing:
-	•	ViewModel unit tests for preset selection and editing
-	•	Validation tests for preventing invalid layouts
+✅ Issue 3.5 – UI for display layouts & presets [COMPLETED]
+	•	✅ Build UI:
+	•	✅ Show current display configuration:
+	•	✅ Display configuration section with ID and display count
+	•	✅ Per-display information (name, resolution, scale, main status)
+	•	✅ List available presets for the config:
+	•	✅ Preset list with expand/collapse rows
+	•	✅ Window count per preset
+	•	✅ Validation status indicators
+	•	✅ Created/modified timestamps
+	•	✅ Create/edit/delete presets:
+	•	✅ Create preset sheet with name input
+	•	✅ Rename preset functionality
+	•	✅ Delete preset confirmation
+	•	✅ Apply preset button with result display
+	•	✅ Allow "simulate apply" mode for previewing:
+	•	✅ simulatePresetApplication() for validation
+	•	✅ PresetInfo with validation results
+	•	✅ Visual indicators for invalid presets
+	•	✅ DisplayLayoutsViewModel for UI business logic:
+	•	✅ State management (loading, error, current config)
+	•	✅ Preset management (create, delete, rename, apply)
+	•	✅ Automation control (auto-apply toggle)
+	•	✅ Window enumeration and grouping by application
+	•	✅ Display info extraction
+	•	✅ Accessibility permission checking
+	•	✅ DisplayLayoutsView with SwiftUI:
+	•	✅ Complete UI with all management features
+	•	✅ Accessibility permissions prompt
+	•	✅ Error/loading states
+	•	✅ Current windows section grouped by app
+	•	✅ Apply result display with success/failure details
+	•	✅ Tests written & passing:
+	•	✅ DisplayLayoutsViewModelTests (24 tests): State, presets, application, automation
+	•	✅ ViewModel unit tests for preset selection and editing
+	•	✅ Validation tests for preventing invalid layouts
+	•	✅ Full workflow integration tests
 
 ⸻
 

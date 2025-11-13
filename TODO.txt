@@ -172,15 +172,23 @@ Goal: Control mouse wheel behavior: smooth scrolling and inversion per device.
 
 ⸻
 
-Issue 2.5 – UI for per-device scroll settings
-	•	Build UI listing detected devices and their settings:
-	•	Toggle inversion
-	•	Enable/disable smooth scrolling
-	•	Adjust smoothing strength
-	•	Handle devices appearing/disappearing at runtime
-	•	Tests written & passing:
-	•	ViewModel tests for device list updates
-	•	Tests for correct binding of UI settings → config model
+✅ Issue 2.5 – UI for per-device scroll settings [COMPLETED]
+	•	✅ Build UI listing detected devices and their settings:
+	•	✅ Toggle inversion (vertical and horizontal)
+	•	✅ Enable/disable smooth scrolling
+	•	✅ Adjust smoothing strength (vertical/horizontal multipliers)
+	•	✅ Handle devices appearing/disappearing at runtime (refresh button)
+	•	✅ ScrollMasterView with SwiftUI interface:
+	•	✅ Device list with expand/collapse rows
+	•	✅ Default configuration editor
+	•	✅ Smooth scroll parameters editor (duration, curve, multipliers)
+	•	✅ Real-time device status and configuration display
+	•	✅ ScrollMasterViewModel for UI business logic:
+	•	✅ Device enumeration and loading
+	•	✅ Configuration updates with persistence
+	•	✅ Error handling and state management
+	•	✅ Tests written & passing:
+	•	✅ ScrollMasterViewModelTests (22 tests): Device management, updates, persistence
 
 ⸻
 

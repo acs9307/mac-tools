@@ -7,6 +7,7 @@ A powerful suite of macOS system tools for key and window manipulation, installa
 
 ## Features
 
+- **Caps Lock Remapping**: Transform Caps Lock into a more useful key with configurable quick tap (e.g., Escape) and long press (e.g., Control) actions
 - **Key Manipulation**: Global hotkey registration, key event simulation, and text typing
 - **Window Manipulation**: Window positioning, resizing, arrangement presets, and multi-monitor support
 - **Daemon Architecture**: Lightweight background service with automatic startup
@@ -19,6 +20,7 @@ A powerful suite of macOS system tools for key and window manipulation, installa
 MacTools is built with a modular architecture:
 
 - **MacToolsCore**: Core daemon infrastructure and agent management
+- **CapsLockAgent**: Caps Lock key remapping with timing-based actions
 - **KeyManipulation**: Key event handling and global hotkey system
 - **WindowManipulation**: Window management and arrangement operations
 - **MacToolsCLI**: Command-line interface
@@ -119,6 +121,29 @@ mactools window center
 mactools key type "Hello, World!"
 ```
 
+### Caps Lock Operations
+
+```bash
+# Show Caps Lock configuration and status
+mactools capslock status
+
+# Enable Caps Lock manipulation
+mactools capslock enable
+
+# Disable Caps Lock manipulation
+mactools capslock disable
+
+# Set minimum press duration (in milliseconds)
+# Values below this threshold trigger quick tap action (default: Escape)
+# Values at or above trigger long press action (default: Control)
+mactools capslock set-delay 200
+```
+
+**Default Behavior:**
+- **Quick Tap** (< 200ms): Sends Escape key
+- **Long Press** (≥ 200ms): Acts as Control modifier
+- Original Caps Lock functionality is disabled
+
 ### Configuration
 
 ```bash
@@ -156,6 +181,19 @@ Configuration files are stored in `~/.config/mactools/config.json`.
   "daemon": {
     "autoStart": true,
     "logLevel": "info"
+  },
+  "capsLock": {
+    "enabled": true,
+    "minPressDuration": 0.2,
+    "quickTapAction": {
+      "type": "sendKey",
+      "value": 53
+    },
+    "longPressAction": {
+      "type": "sendModifier",
+      "value": "control"
+    },
+    "disableCapsLock": true
   },
   "keyManipulation": {
     "enabled": true,

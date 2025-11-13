@@ -95,12 +95,16 @@ Issue 1.4 – Menu bar UI for Caps Lock settings
 
 ⸻
 
-Issue 1.5 – System integration & startup behavior
-	•	Implement LaunchAgent or “Start at login” option for Caps Lock tuner
-	•	Verify behavior after reboot and login
-	•	Provide a simple on/off kill switch
-	•	Tests written & passing:
-	•	At least integration test for startup logic / preferences
+✅ Issue 1.5 – System integration & startup behavior [COMPLETED]
+	•	✅ Implement LaunchAgent integration:
+	•	✅ CapsLockAgent registered with DaemonManager on startup
+	•	✅ Loads configuration from persistent storage automatically
+	•	✅ Uses existing com.mactools.daemon.plist for startup
+	•	✅ Provide simple on/off control:
+	•	✅ CLI commands: enable, disable, status, set-delay
+	•	✅ Configuration persists across restarts
+	•	✅ Tests written & passing:
+	•	✅ DaemonIntegrationTests (24 tests): Registration, startup, lifecycle, workflows
 
 ⸻
 

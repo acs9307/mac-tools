@@ -64,6 +64,7 @@ let package = Package(
                 "MacToolsCore",
                 "KeyManipulation",
                 "WindowManipulation",
+                "CapsLockAgent",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
             path: "Sources/MacToolsCLI"

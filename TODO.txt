@@ -156,14 +156,19 @@ Goal: Control mouse wheel behavior: smooth scrolling and inversion per device.
 
 ⸻
 
-Issue 2.4 – Per-device configuration model & storage
-	•	Define configuration schema:
-	•	Device ID → { invert: bool, smoothEnabled: bool, smoothParams: … }
-	•	Implement config persistence
-	•	Implement “fallback” profile for unknown devices
-	•	Tests written & passing:
-	•	Config save/load
-	•	Correct profile selection per device ID
+✅ Issue 2.4 – Per-device configuration model & storage [COMPLETED]
+	•	✅ Define configuration schema:
+	•	✅ Device ID → DeviceScrollConfiguration (DeviceScrollConfiguration struct)
+	•	✅ Per-device transform with invert, multipliers, smoothEnabled
+	•	✅ Implement config persistence:
+	•	✅ ScrollConfigurationManager for JSON persistence
+	•	✅ Integration with MacToolsCore Configuration system
+	•	✅ Implement "fallback" profile for unknown devices:
+	•	✅ ScrollConfigurationRegistry.defaultConfiguration property
+	•	✅ Returns default transform when device not configured
+	•	✅ Tests written & passing:
+	•	✅ ScrollConfigurationManagerTests (37 tests): Save/load, persistence, edge cases
+	•	✅ Correct profile selection per device ID verified
 
 ⸻
 

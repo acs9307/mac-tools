@@ -139,13 +139,20 @@ Goal: Control mouse wheel behavior: smooth scrolling and inversion per device.
 
 ⸻
 
-Issue 2.3 – Smooth scrolling algorithm
-	•	Design smoothing algorithm (e.g., transform discrete wheel ticks into a smoother delta over time)
-	•	Make algorithm parameters configurable (e.g., smoothing factor)
-	•	Ensure performance characteristics are acceptable (no visible lag)
-	•	Tests written & passing:
-	•	Unit tests for algorithm (input tick sequence → expected smoothed sequence)
-	•	Edge cases (fast scroll bursts, tiny deltas)
+✅ Issue 2.3 – Smooth scrolling algorithm [COMPLETED]
+	•	✅ Design smoothing algorithm:
+	•	✅ Animation-based approach: spreads discrete wheel ticks over time
+	•	✅ Multiple interpolation curves: linear, ease-in, ease-out, ease-in-out
+	•	✅ Accumulates deltas and returns incremental output per frame
+	•	✅ Make algorithm parameters configurable:
+	•	✅ duration: How long to spread scroll (default 0.3s)
+	•	✅ curve: Interpolation curve type
+	•	✅ distanceMultiplier: Scaling factor for scroll distance
+	•	✅ minimumDelta: Filter for tiny inputs
+	•	✅ Performance characteristics: Frame-based tick() system, no visible lag
+	•	✅ Tests written & passing:
+	•	✅ InterpolationCurveTests (7 tests): Curve behavior and properties
+	•	✅ SmoothScrollEngineTests (47 tests): Algorithm, edge cases, performance
 
 ⸻
 

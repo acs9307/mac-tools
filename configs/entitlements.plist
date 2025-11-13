@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Allow hardened runtime -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <false/>
+
+    <!-- Allow unsigned executable memory (required for some Swift features) -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <false/>
+
+    <!-- Disable library validation (allow loading system frameworks) -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <false/>
+
+    <!-- Allow DYLD environment variables (development only) -->
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+    <false/>
+
+    <!-- Disable executable memory protection (needed for JIT) -->
+    <key>com.apple.security.cs.disable-executable-page-protection</key>
+    <false/>
+
+    <!-- App Sandbox (not enabled for system-level tools) -->
+    <key>com.apple.security.app-sandbox</key>
+    <false/>
+
+    <!-- Accessibility (required for MacTools functionality) -->
+    <!-- Note: This entitlement is for documentation only -->
+    <!-- Actual accessibility permissions are requested at runtime -->
+</dict>
+</plist>

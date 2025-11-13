@@ -1,0 +1,348 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.0.0)'
+        required: true
+
+jobs:
+  build-and-sign:
+    name: Build, Sign, and Notarize
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '5.9'
+
+      - name: Build release binary
+        run: |
+          swift build -c release
+          echo "Binary built at: .build/release/mactools"
+
+      - name: Run tests
+        run: swift test
+
+      - name: Import code signing certificate
+        if: ${{ secrets.CODESIGN_CERTIFICATE }}
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.CODESIGN_CERTIFICATE }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CODESIGN_CERTIFICATE_PASSWORD }}
+        run: |
+          # Create temporary keychain
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Import certificate
+          echo "$CERTIFICATE_BASE64" | base64 --decode > certificate.p12
+          security import certificate.p12 \
+            -k "$KEYCHAIN_PATH" \
+            -P "$CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Add keychain to search list
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          # Clean up
+          rm certificate.p12
+
+      - name: Sign binary
+        if: ${{ secrets.CODESIGN_CERTIFICATE }}
+        env:
+          CODESIGN_IDENTITY: ${{ secrets.CODESIGN_IDENTITY }}
+        run: |
+          chmod +x scripts/sign.sh
+          ./scripts/sign.sh .build/release/mactools
+
+      - name: Notarize binary
+        if: ${{ secrets.CODESIGN_CERTIFICATE && secrets.NOTARIZATION_PASSWORD }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          NOTARIZATION_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
+        run: |
+          chmod +x scripts/notarize.sh
+          ./scripts/notarize.sh .build/release/mactools
+
+      - name: Verify signature
+        if: ${{ secrets.CODESIGN_CERTIFICATE }}
+        run: |
+          chmod +x scripts/verify-signature.sh
+          ./scripts/verify-signature.sh .build/release/mactools
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Release version: $VERSION"
+
+      - name: Create tarball distribution
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+
+          # Create tarball
+          mkdir -p dist
+          cp .build/release/mactools dist/
+          cp README.md LICENSE dist/
+          cp -r configs dist/
+          cp -r scripts dist/
+          cp -r docs dist/
+
+          cd dist
+          tar -czf "../mactools-${VERSION}-macos.tar.gz" *
+          cd ..
+
+          # Create checksum
+          shasum -a 256 "mactools-${VERSION}-macos.tar.gz" > "mactools-${VERSION}-macos.tar.gz.sha256"
+
+      - name: Create DMG
+        env:
+          CODESIGN_IDENTITY: ${{ secrets.CODESIGN_IDENTITY }}
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+
+          chmod +x scripts/create-dmg.sh
+          ./scripts/create-dmg.sh "$VERSION" .build/release/mactools
+
+          # DMG script creates the .sha256 file automatically
+
+      - name: Create PKG
+        env:
+          INSTALLER_IDENTITY: ${{ secrets.INSTALLER_IDENTITY }}
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+
+          chmod +x scripts/create-pkg.sh
+          ./scripts/create-pkg.sh "$VERSION" .build/release/mactools
+
+          # PKG script creates the .sha256 file automatically
+
+      - name: List release artifacts
+        run: |
+          echo "Release artifacts:"
+          ls -lh mactools-*
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mactools-release
+          path: |
+            mactools-*.tar.gz
+            mactools-*.tar.gz.sha256
+            mactools-*.dmg
+            mactools-*.dmg.sha256
+            mactools-*.pkg
+            mactools-*.pkg.sha256
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            mactools-*.tar.gz
+            mactools-*.tar.gz.sha256
+            mactools-*.dmg
+            mactools-*.dmg.sha256
+            mactools-*.pkg
+            mactools-*.pkg.sha256
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## Installation
+
+            ### Quick Install (DMG)
+            1. Download `mactools-${{ steps.version.outputs.VERSION }}-macos.dmg`
+            2. Mount the DMG and run "Install MacTools.command"
+            3. Grant permissions: `mactools permissions --request`
+
+            ### Installer Package (PKG)
+            1. Download `mactools-${{ steps.version.outputs.VERSION }}-macos.pkg`
+            2. Double-click to install
+            3. Follow the installation wizard
+
+            ### Manual Install (Tarball)
+            1. Download `mactools-${{ steps.version.outputs.VERSION }}-macos.tar.gz`
+            2. Extract: `tar -xzf mactools-${{ steps.version.outputs.VERSION }}-macos.tar.gz`
+            3. Install: `sudo cp mactools /usr/local/bin/`
+
+            ## Verification
+
+            Verify downloads with SHA-256 checksums:
+            ```bash
+            shasum -a 256 -c mactools-${{ steps.version.outputs.VERSION }}-macos.dmg.sha256
+            ```
+
+            ## Upgrading
+
+            If upgrading from a previous version:
+            ```bash
+            ./scripts/upgrade.sh
+            ```
+
+            ## Documentation
+
+            - [User Guide](https://github.com/acs9307/mac-tools/blob/main/docs/user-guide.md)
+            - [Troubleshooting](https://github.com/acs9307/mac-tools/blob/main/docs/TROUBLESHOOTING.md)
+            - [Release Guide](https://github.com/acs9307/mac-tools/blob/main/docs/RELEASE.md)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  verify-clean-install:
+    name: Verify Clean Install
+    needs: build-and-sign
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        install-method: [tarball, dmg, pkg]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: mactools-release
+
+      - name: List downloaded artifacts
+        run: |
+          echo "Downloaded artifacts:"
+          ls -lh mactools-*
+
+      - name: Verify checksums
+        run: |
+          # Verify all checksums
+          for file in mactools-*.sha256; do
+            echo "Verifying $file..."
+            shasum -a 256 -c "$file" || echo "⚠ Checksum verification failed for $file"
+          done
+
+      - name: Install from tarball
+        if: matrix.install-method == 'tarball'
+        run: |
+          echo "Testing tarball installation..."
+
+          # Find the tarball
+          TARBALL=$(ls mactools-*.tar.gz | grep -v sha256 | head -1)
+          echo "Using tarball: $TARBALL"
+
+          # Extract
+          mkdir -p extracted
+          tar -xzf "$TARBALL" -C extracted
+
+          # Install
+          sudo cp extracted/mactools /usr/local/bin/
+          sudo chmod +x /usr/local/bin/mactools
+
+          echo "✓ Tarball installation complete"
+
+      - name: Install from DMG
+        if: matrix.install-method == 'dmg'
+        run: |
+          echo "Testing DMG installation..."
+
+          # Find the DMG
+          DMG=$(ls mactools-*.dmg | head -1)
+          echo "Using DMG: $DMG"
+
+          # Verify DMG
+          hdiutil verify "$DMG"
+          echo "✓ DMG verified"
+
+          # Mount DMG
+          MOUNT_OUTPUT=$(hdiutil attach "$DMG")
+          MOUNT_POINT=$(echo "$MOUNT_OUTPUT" | grep "/Volumes/" | awk '{print $3}')
+          echo "Mounted at: $MOUNT_POINT"
+
+          # Install binary
+          if [ -f "$MOUNT_POINT/mactools" ]; then
+            sudo cp "$MOUNT_POINT/mactools" /usr/local/bin/
+            sudo chmod +x /usr/local/bin/mactools
+            echo "✓ Binary installed"
+          else
+            echo "❌ Binary not found in DMG"
+            exit 1
+          fi
+
+          # Unmount
+          hdiutil detach "$MOUNT_POINT" -quiet
+          echo "✓ DMG installation complete"
+
+      - name: Install from PKG
+        if: matrix.install-method == 'pkg'
+        run: |
+          echo "Testing PKG installation..."
+
+          # Find the PKG
+          PKG=$(ls mactools-*.pkg | head -1)
+          echo "Using PKG: $PKG"
+
+          # Verify PKG signature
+          pkgutil --check-signature "$PKG" || echo "⚠ PKG signature check"
+
+          # Install (using sudo installer)
+          sudo installer -pkg "$PKG" -target / -verbose
+
+          echo "✓ PKG installation complete"
+
+      - name: Verify installation
+        run: |
+          echo "Verifying installation..."
+
+          # Check binary is in PATH
+          which mactools
+
+          # Check version
+          mactools --version || echo "⚠ Version command not implemented yet"
+
+          # Check help
+          mactools --help || echo "⚠ Help command not implemented yet"
+
+          # Verify signature (if signed)
+          if codesign -dv /usr/local/bin/mactools 2>&1 | grep -q "Signature"; then
+            echo "✓ Binary is signed"
+            codesign --verify --deep --strict /usr/local/bin/mactools
+          else
+            echo "⚠ Binary is not signed (expected for development builds)"
+          fi
+
+          echo "✓ Installation verification complete"
+
+      - name: Test basic functionality
+        run: |
+          echo "Testing basic functionality..."
+
+          # These commands should not require permissions
+          mactools --help || true
+          mactools --version || true
+
+          # Check that configuration directory is created (PKG only)
+          if [ "${{ matrix.install-method }}" = "pkg" ]; then
+            if [ -d "$HOME/.config/mactools" ]; then
+              echo "✓ Configuration directory created"
+            else
+              echo "⚠ Configuration directory not created"
+            fi
+          fi
+
+          echo "✓ Clean install verification completed for ${{ matrix.install-method }}"

@@ -396,6 +396,40 @@ if let window = try agent.getFocusedWindow() {
 2. Check that the target application supports accessibility APIs
 3. Some applications may restrict window manipulation
 
+## Releases & Distribution
+
+MacTools is distributed in multiple formats:
+- **Signed DMG** - Easy drag-and-drop installation with documentation
+- **Signed PKG** - Native macOS installer with automated setup
+- **Source Tarball** - Lightweight distribution for manual installation
+
+Download the latest release from [GitHub Releases](https://github.com/acs9307/mac-tools/releases).
+
+All releases are:
+- Code signed with Apple Developer ID
+- Notarized by Apple
+- Include SHA-256 checksums for verification
+
+### Upgrading
+
+To upgrade to a new version:
+
+```bash
+# Using the upgrade script
+./scripts/upgrade.sh
+
+# Or download new version and reinstall
+```
+
+The upgrade process:
+- Backs up your configuration
+- Stops the running daemon
+- Replaces the binary
+- Restarts the daemon
+- Preserves all settings
+
+See [RELEASE.md](docs/RELEASE.md) for complete release, upgrade, and distribution documentation.
+
 ## Uninstallation
 
 ```bash

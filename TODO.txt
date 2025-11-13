@@ -243,14 +243,30 @@ Goal: Detect display configurations and auto-arrange windows based on pre-config
 
 ⸻
 
-Issue 3.2 – Detect configuration changes & trigger events
-	•	Implement listener for:
-	•	Display connect/disconnect
-	•	Resolution/arrangement changes
-	•	Dispatch internal “configuration changed” events
-	•	Tests written & passing:
-	•	Mock events → correct internal notifications
-	•	Debouncing logic (avoid spamming rearrange on rapid changes)
+✅ Issue 3.2 – Detect configuration changes & trigger events [COMPLETED]
+	•	✅ Implement listener for:
+	•	✅ Display connect/disconnect via NSApplication.didChangeScreenParametersNotification
+	•	✅ Resolution/arrangement changes (same notification)
+	•	✅ DisplayChangeListener with handler protocol
+	•	✅ Dispatch internal "configuration changed" events:
+	•	✅ DisplayChangeHandler protocol for notifications
+	•	✅ Fuzzy matching to avoid spurious notifications
+	•	✅ DisplayConfigurationChangeEvent with change type detection
+	•	✅ Debouncing logic:
+	•	✅ Configurable debounce interval (default 0.5s)
+	•	✅ DispatchSourceTimer for precise timing
+	•	✅ Cancels pending notifications on new changes
+	•	✅ Prevents notification spam during rapid changes
+	•	✅ DisplayConfigurationRegistry:
+	•	✅ Store/retrieve configurations by identifier
+	•	✅ Fuzzy matching to find stored configs
+	•	✅ Thread-safe concurrent queue
+	•	✅ Tests written & passing:
+	•	✅ DisplayChangeListenerTests (13 tests): Lifecycle, debouncing, notifications
+	•	✅ DisplayConfigurationRegistryTests (11 tests): Storage, matching, thread safety
+	•	✅ DisplayConfigurationChangeEventTests (5 tests): Change type detection
+	•	✅ Mock events correctly trigger internal notifications
+	•	✅ Debouncing prevents notification spam
 
 ⸻
 

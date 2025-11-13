@@ -424,13 +424,43 @@ Epic 4 – Cross-Cutting Concerns: Permissions, Logging, Telemetry
 
 Goal: Shared infra for permissions, logging, and optional telemetry.
 
-Issue 4.1 – Permissions & onboarding flow
-	•	Create shared onboarding flow to:
-	•	Request Accessibility permissions
-	•	Request Input Monitoring (as needed)
-	•	Provide clear instructions when permissions are denied
-	•	Tests written & passing:
-	•	State machine tests for permission status transitions
+✅ Issue 4.1 – Permissions & onboarding flow [COMPLETED]
+	•	✅ Create shared onboarding flow to:
+	•	✅ PermissionType enum with all permission types
+	•	✅ Display names, purposes, and system settings paths
+	•	✅ Critical vs non-critical classification
+	•	✅ PermissionStatus enum for state machine:
+	•	✅ notDetermined, denied, granted, promptShown states
+	•	✅ isGranted, isInProgress, isDenied computed properties
+	•	✅ PermissionState struct for managing all permissions
+	•	✅ Subscript access by permission type
+	•	✅ allCriticalGranted and anyDenied checks
+	•	✅ missingPermissions and missingCriticalPermissions lists
+	•	✅ Enhanced PermissionsManager:
+	•	✅ Request Accessibility permissions with state tracking
+	•	✅ Request Input Monitoring permissions with event tap check
+	•	✅ Screen Recording permission support (macOS 10.15+)
+	•	✅ Observable object with @Published permission state
+	•	✅ Polling support for permission changes
+	•	✅ openSystemSettings() to guide users
+	•	✅ PermissionsOnboardingView with SwiftUI:
+	•	✅ Step-by-step permission request flow
+	•	✅ Visual status indicators (granted/denied/in-progress)
+	•	✅ Detailed instructions for each permission
+	•	✅ Progress tracking (X/Y granted)
+	•	✅ Completion view when all permissions granted
+	•	✅ Automatic polling for permission changes
+	•	✅ Provide clear instructions when permissions are denied:
+	•	✅ Per-permission instruction boxes
+	•	✅ System Settings path displayed for each permission
+	•	✅ Step-by-step guidance (numbered instructions)
+	•	✅ "Open System Settings" buttons
+	•	✅ Tests written & passing:
+	•	✅ PermissionTypeTests (15 tests): Display names, purposes, critical status, paths
+	•	✅ PermissionStatusTests (11 tests): State transitions, flags, Codable
+	•	✅ PermissionStateTests (28 tests): Subscripts, critical checks, missing permissions
+	•	✅ PermissionsManagerTests (12 tests): Checking, updating, polling, utility methods
+	•	✅ State machine tests for permission status transitions
 
 ⸻
 

@@ -1,0 +1,61 @@
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - explicit_init
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - multiline_parameters
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - sorted_first_last
+  - syntactic_sugar
+  - unneeded_parentheses_in_closure_argument
+
+excluded:
+  - .build
+  - .swiftpm
+  - Packages
+  - Tests/LinuxMain.swift
+
+# Rule configurations
+file_length:
+  warning: 500
+  error: 1000
+
+function_body_length:
+  warning: 50
+  error: 100
+
+type_body_length:
+  warning: 300
+  error: 500
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+identifier_name:
+  min_length:
+    warning: 2
+  max_length:
+    warning: 50
+  excluded:
+    - id
+    - x
+    - y
+
+nesting:
+  type_level:
+    warning: 2
+  statement_level:
+    warning: 5
+
+reporter: "xcode"
